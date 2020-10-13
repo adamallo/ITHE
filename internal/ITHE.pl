@@ -52,8 +52,7 @@ my @outfiles;
 ######################################################
 my $execond_inputfile="";
 my $filtercond_inputfile="";
-my $NABfiltercond_inputfile1="";
-my $NABfiltercond_inputfile2="";
+my $NABfiltercond_inputfile="";
 my $covBfiltercond_inputfile="";
 my $popAFfiltercond_inputfile="";
 my $output_file="";
@@ -62,7 +61,7 @@ my $GNOMAD=$ENV{'ITHE_GNOMAD'};
 
 #Flags
 my $help;
-my $usage="Usage: $0 [options] -o output_file \n\nWARNING: This is a secondary script that is not inteded to be executed directly.\n\n\nOptions:\n--------\n\t-e/--exec_cond_inputfile : input file for execution parameters and options\n\t-f/--filt_cond_inputfile : input file for execution parameters and options\n\t--NABfilt_cond_inputfile : input file for the filtering options of the NAB sample\n\t--NABfilt_cond_inputfile2 : secondary input file for a secondary filter (OR filter implemented in a dirty way) of the NAB sample\n\t--covaltB_cond_inputfile : input file for the filtering taking into account characteristics of the unfiltered in the comparison\n\t--popAF_cond_inputfile: input file for the filter of population allele frequencies using gnomAD\n\t--n_cores : number of cores to execute some steps in parallel (requires the perl package Parallel::Loops)\n\t--output_vcf: (bool) generate resulting vcf files or not\n\t--output_list: (bool) generate resulting list of variants or not\n\t--comp: (int) indicating the comprehensiveness of the output, 0=no files, 1=only needed files to call variants, 2= all intermediate variants\n\n";
+my $usage="Usage: $0 [options] -o output_file \n\nWARNING: This is a secondary script that is not inteded to be executed directly.\n\n\nOptions:\n--------\n\t-e/--exec_cond_inputfile : input file for execution parameters and options\n\t-f/--filt_cond_inputfile : input file for execution parameters and options\n\t--NABfilt_cond_inputfile : input file for the filtering options of the control sample\n\t--covaltB_cond_inputfile : input file for the filtering taking into account characteristics of the unfiltered in the comparison\n\t--popAF_cond_inputfile: input file for the filter of population allele frequencies using gnomAD\n\t--n_cores : number of cores to execute some steps in parallel (requires the perl package Parallel::Loops)\n\t--output_vcf: (bool) generate resulting vcf files or not\n\t--output_list: (bool) generate resulting list of variants or not\n\t--comp: (int) indicating the comprehensiveness of the output, 0=no files, 1=only needed files to call variants, 2= all intermediate variants\n\n";
 ######################################################
 
 ######################################################
@@ -74,8 +73,7 @@ my $usage="Usage: $0 [options] -o output_file \n\nWARNING: This is a secondary s
 (! GetOptions(
     'exec_cond_inputfile|e=s' => \$execond_inputfile,
 	'filt_cond_inputfile|f=s' => \$filtercond_inputfile,
-	'NABfilt_cond_inputfile=s' => \$NABfiltercond_inputfile1,
-    'NABfilt_cond_inputfile2=s' => \$NABfiltercond_inputfile2,
+	'NABfilt_cond_inputfile=s' => \$NABfiltercond_inputfile,
     'covaltB_cond_inputfile=s' => \$covBfiltercond_inputfile,
     'popAF_cond_inputfile=s' => \$popAFfiltercond_inputfile,
 	'output_file|o=s' => \$output_file,
@@ -108,15 +106,13 @@ if($n_cores>1)
 
 my @exe_parameters=("input");
 my @filtering_parameters=("");
-my @NABfiltering_parameters1=("");
-my @NABfiltering_parameters2=("");
+my @NABfiltering_parameters=("");
 my @covBfiltering_parameters=("");
 my @popAFfiltering_parameters=("");
 
 my @exe_param_values=([("")]);
 my @filtering_param_values=([("")]);
-my @NABfiltering_param_values1=([("")]);
-my @NABfiltering_param_values2=([("")]);
+my @NABfiltering_param_values=([("")]);
 my @covBfiltering_param_values=([("")]);
 my @popAFfiltering_param_values=([("")]);
 
@@ -134,16 +130,10 @@ if ($filtercond_inputfile ne "")
     parse_parameters_values($filtercond_inputfile,\@filtering_parameters,\@filtering_param_values);
 }
 
-if ($NABfiltercond_inputfile1 ne "")
+if ($NABfiltercond_inputfile ne "")
 {
-    @NABfiltering_parameters1=();
-    parse_parameters_values($NABfiltercond_inputfile1,\@NABfiltering_parameters1,\@NABfiltering_param_values1);
-}
-
-if ($NABfiltercond_inputfile2 ne "")
-{
-    @NABfiltering_parameters2=();
-    parse_parameters_values($NABfiltercond_inputfile2,\@NABfiltering_parameters2,\@NABfiltering_param_values2);
+    @NABfiltering_parameters=();
+    parse_parameters_values($NABfiltercond_inputfile,\@NABfiltering_parameters,\@NABfiltering_param_values);
 }
 
 if ($covBfiltercond_inputfile ne "")
@@ -212,8 +202,6 @@ else
 
 my $name_condition;
 my @filtering_conditions;
-my @NABfiltering_conditions1; ##In order to be easily accesed from the filtering functions
-my @NABfiltering_conditions2;
 my @NABfiltering_conditions;
 my @covBfiltering_conditions;
 my @popAFfiltering_conditions;
@@ -233,8 +221,7 @@ $sample=~s/([^.]*)\..*/$1/;
 print("Generating all combinations of filtering values to be explored by this run...");
 combs(0,"",\@exe_parameters,\@exe_param_values,\@exe_conditions);
 combs(0,"",\@filtering_parameters,\@filtering_param_values,\@filtering_conditions);
-combs(0,"",\@NABfiltering_parameters1,\@NABfiltering_param_values1,\@NABfiltering_conditions1);
-combs(0,"",\@NABfiltering_parameters2,\@NABfiltering_param_values2,\@NABfiltering_conditions2);
+combs(0,"",\@NABfiltering_parameters,\@NABfiltering_param_values,\@NABfiltering_conditions);
 combs(0,"",\@covBfiltering_parameters,\@covBfiltering_param_values,\@covBfiltering_conditions);
 combs(0,"",\@popAFfiltering_parameters,\@popAFfiltering_param_values,\@popAFfiltering_conditions);
 print(" Done\n");
@@ -258,21 +245,7 @@ my @filtNABcovBPAFPAFnames=qw(AfiltNABcovBPAF_Priv_PAF_ BfiltNABcovBPAF_Priv_PAF
 @HeaderStatsfiltNABcovBPAFPAF=makeHeaderPAF(\@filtNABcovBPAFPAFnames,\@popAFfiltering_conditions);
 
 #print("DEBUG: @exe_parameters, @exe_param_values");
-#print("DEBUG: @exe_conditions,@filtering_conditions,@NABfiltering_conditions1,@NABfiltering_conditions2\n");
-
-##Generating final NAB filtering conditions
-###########################################
-print("Generating final NAB filtering conditions...");
-my $pos=0;
-for (my $i=0; $i<scalar @NABfiltering_conditions1; ++$i)
-{
-    for (my $j=0; $j< scalar @NABfiltering_conditions2; ++$j)
-    {
-        $NABfiltering_conditions[$pos]="$NABfiltering_conditions1[$i]$sep_param$NABfiltering_conditions2[$j]";
-        $pos+=1;
-    }
-}
-print(" Done\n");
+#print("DEBUG: @exe_conditions,@filtering_conditions,@NABfiltering_conditions\n");
 
 if ($n_cores>1)
 {

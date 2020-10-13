@@ -1,6 +1,6 @@
 #!/bin/bash
 
-usage="ITHE Usage:\n-----------\n$0 directory torun_file exe_params filtering_params NAB_params NAB2_params covB_params popAF_params n_cores output_vcf output_list comprehensiveness filterINDELS [queue]\nThis script executes ITHE_control.pl for each sample in a directory with its name. Then it integrates all the information in a file named results.csv and results_basictstv.csv.\nManifest file structure: output N_file A_file B_file [DNA_Quantity]"
+usage="ITHE Usage:\n-----------\n$0 directory torun_file exe_params filtering_params NAB_params covB_params popAF_params n_cores output_vcf output_list comprehensiveness filterINDELS [queue]\nThis script executes ITHE_control.pl for each sample in a directory with its name. Then it integrates all the information in a file named results.csv and results_basictstv.csv.\nManifest file structure: output N_file A_file B_file [DNA_Quantity]"
 
 queue=""
 
@@ -14,9 +14,9 @@ then
     exit 0
 fi
 
-if (! ([[ $# -eq 13 ]] || [[ $# -eq 14 ]]))
+if (! ([[ $# -eq 12 ]] || [[ $# -eq 13 ]]))
 then
-    echo -e "ERROR: this script needs 13 or 14 arguments, but only $# have been provided.\n\n$usage"
+    echo -e "ERROR: this script needs 12 or 13 arguments, but only $# have been provided.\n\n$usage"
     exit 1
 fi
 
@@ -33,7 +33,7 @@ fi
 
 paramfilenames=("exe_params" "filtering_params" "NAB_params" "NAB2_params" "covB_params" "popAF_params")
 
-for ifile in {3..8}
+for ifile in {3..7}
 do
     if [[ ! -s ${!ifile} ]]
     then
@@ -59,15 +59,14 @@ torun=$(readlink -f $2)
 exe_params=$(readlink -f $3)
 filtering_params=$(readlink -f $4)
 NAB_params=$(readlink -f $5)
-NAB2_params=$(readlink -f $6)
-covB_params=$(readlink -f $7)
-popAF_params=$(readlink -f $8)
-n_cores=$9
-output_vcf=${10}
-output_list=${11}
-comp=${12}
-filterINDELS=${13}
-queue=${14}
+covB_params=$(readlink -f $6)
+popAF_params=$(readlink -f $7)
+n_cores=$8
+output_vcf=${9}
+output_list=${10}
+comp=${11}
+filterINDELS=${12}
+queue=${13}
 
 reldir=$(dirname $2)
 
@@ -95,16 +94,16 @@ do
     
     if [[ $queue == "" ]]
     then
-        id=$($ITHE_INT/perl.sh $ITHE_INT/ITHE_control.pl -e $exe_params -f $filtering_params --NABfilt_cond_inputfile $NAB_params --NABfilt_cond_inputfile2 $NAB2_params --covaltB_cond_inputfile $covB_params --popAF_cond_inputfile $popAF_params -o $dir/${output}.csv --normal_bamfile $abscontrol --sample_A_bamfile $absa --sample_B_bamfile $absb --output_dir $dir/$output --n_cores $n_cores --output_vcf $output_vcf --output_list $output_list --comp $comp --filterINDELS $filterINDELS | tee $dir/${output}.out | tail -n 1)
+        id=$($ITHE_INT/perl.sh $ITHE_INT/ITHE_control.pl -e $exe_params -f $filtering_params --NABfilt_cond_inputfile $NAB_params --covaltB_cond_inputfile $covB_params --popAF_cond_inputfile $popAF_params -o $dir/${output}.csv --normal_bamfile $abscontrol --sample_A_bamfile $absa --sample_B_bamfile $absb --output_dir $dir/$output --n_cores $n_cores --output_vcf $output_vcf --output_list $output_list --comp $comp --filterINDELS $filterINDELS | tee $dir/${output}.out | tail -n 1)
     else
-        id=$($ITHE_INT/perl.sh $ITHE_INT/ITHE_control.pl -e $exe_params -f $filtering_params --NABfilt_cond_inputfile $NAB_params --NABfilt_cond_inputfile2 $NAB2_params --covaltB_cond_inputfile $covB_params --popAF_cond_inputfile $popAF_params -o $dir/${output}.csv --normal_bamfile $abscontrol --sample_A_bamfile $absa --sample_B_bamfile $absb --output_dir $dir/$output --n_cores $n_cores --output_vcf $output_vcf --output_list $output_list --comp $comp --queue $queue --filterINDELS $filterINDELS | tee $dir/${output}.out | tail -n 1) 
+        id=$($ITHE_INT/perl.sh $ITHE_INT/ITHE_control.pl -e $exe_params -f $filtering_params --NABfilt_cond_inputfile $NAB_params --covaltB_cond_inputfile $covB_params --popAF_cond_inputfile $popAF_params -o $dir/${output}.csv --normal_bamfile $abscontrol --sample_A_bamfile $absa --sample_B_bamfile $absb --output_dir $dir/$output --n_cores $n_cores --output_vcf $output_vcf --output_list $output_list --comp $comp --queue $queue --filterINDELS $filterINDELS | tee $dir/${output}.out | tail -n 1) 
     fi
     dependency="${dependency}${ITHE_ARG_SEP}${id}"
 done < $torun
 
 tstv=1
 
-if [[ $comp -ne 2 ]] || [[ ${10} == 0 ]]
+if [[ $comp -ne 2 ]] || [[ ${9} == 0 ]]
 then
     tstv=0
 fi

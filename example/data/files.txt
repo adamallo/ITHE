@@ -1,0 +1,5 @@
+/scratch/dmalload/dcis/tdups/thebams/aaea7099f0984808895d1d438060bc51.bam Control.bam
+/scratch/dmalload/dcis/tdups/thebams/6697a2a1fdc44e9599157d59d62eed05.sorted.readgroup.bam Sample1.bam
+/scratch/dmalload/dcis/tdups/thebams/77cec77bd20a49a6ace124a98d1c7522.bam Sample2.bam
+/scratch/dmalload/dcis/tdups/thebams/572008f4df3f40c692f8087a2af5f11a.sorted.readgroup.bam Sample3.bam
+/scratch/dmalload/dcis/tdups/thebams/2a58be4a2338424b88c3d0146321274f.bam Sample4.bam
