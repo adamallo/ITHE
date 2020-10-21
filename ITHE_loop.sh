@@ -87,7 +87,7 @@ do
         if [[ ! -s ${files[!ifile]} ]]
         then
             echo -e "\tERROR: cannot open the file ${files[!ifile]} as the ${filetype[!ifile]} data for $output, according to the manifest file. ITHE will stop submitting jobs. You may want to stop the jobs submitted and empty the output directory before re-running this program. List of jobs already submitted:"
-            echo $(echo $dependency | sed "s/${ITHE_ARG_SEP}/ /g")
+            echo $(echo $dependency | sed "s/${ITHE_SUBMIT_SEP}/ /g")
             exit 1
         fi
     done
@@ -98,7 +98,7 @@ do
     else
         id=$($ITHE_INT/perl.sh $ITHE_INT/ITHE_control.pl -e $exe_params -f $filtering_params --NABfilt_cond_inputfile $NAB_params --covaltB_cond_inputfile $covB_params --popAF_cond_inputfile $popAF_params -o $dir/${output}.csv --normal_bamfile $abscontrol --sample_A_bamfile $absa --sample_B_bamfile $absb --output_dir $dir/$output --n_cores $n_cores --output_vcf $output_vcf --output_list $output_list --comp $comp --queue $queue --filterINDELS $filterINDELS | tee $dir/${output}.out | tail -n 1) 
     fi
-    dependency="${dependency}${ITHE_ARG_SEP}${id}"
+    dependency="${dependency}${ITHE_SUBMIT_SEP}${id}"
 done < $torun
 
 tstv=1
@@ -110,7 +110,7 @@ fi
 
 if [[ $queue == "" ]]
 then
-    $ITHE_SUBMIT_CMD ${ITHE_ARG_DEP}$dependency $ITHE_MAX_MEM $ITHE_INT/summarizeResults.sh $dir $torun $exe_params $filtering_params $NAB_params $NAB2_params $covB_params $popAF_params $n_cores $tstv
+    $ITHE_SUBMIT_CMD ${ITHE_SUBMIT_DEP}$dependency $ITHE_MAX_MEM $ITHE_INT/summarizeResults.sh $dir $torun $exe_params $filtering_params $NAB_params $NAB2_params $covB_params $popAF_params $n_cores $tstv
 else
-    $ITHE_SUBMIT_CMD ${ITHE_SUBMIT_PAR}$queue ${ITHE_ARG_DEP}$dependency $ITHE_MAX_MEM $ITHE_INT/summarizeResults.sh $dir $torun $exe_params $filtering_params $NAB_params $NAB2_params $covB_params $popAF_params $n_cores $tstv
+    $ITHE_SUBMIT_CMD ${ITHE_SUBMIT_PAR}$queue ${ITHE_SUBMIT_DEP}$dependency $ITHE_MAX_MEM $ITHE_INT/summarizeResults.sh $dir $torun $exe_params $filtering_params $NAB_params $NAB2_params $covB_params $popAF_params $n_cores $tstv
 fi

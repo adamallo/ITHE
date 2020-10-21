@@ -3,10 +3,10 @@ ITHE implementes a somatic variant post-processing pipeline using a system of pe
 
 # Installation
 We developed ITHE to run on a Linux environment, and have only tested it in such kind of environment for now.
-Once dependencies are resolved, the instalation of ITHE only requires downloading the source code and configuring it to run on the user's HPC environment, either manually or using a helper script included in the repository, configAssistant.pl. 
+Once dependencies are resolved, the instalation of ITHE only requires downloading the source code and configuring it to run on the user's HPC environment, either manually or using a helper script included in the repository, configAssistant.sh. 
 
 ## Dependencies
-The following programs and libraries need to be available in the HPC system. ITHE provides a way of loading modules and executing code before any of the programs are executed, increasing its flexibility. These commands need to make sure the executable of each program is in the PATH at execution time. This can be configured manually editing the config.txt file, or running the helper script configAssistant.pl.
+The following programs and libraries need to be available in the HPC system. ITHE provides a way of loading modules and executing code before any of the programs are executed, increasing its flexibility. These commands need to make sure the executable of each program is in the PATH at execution time. This can be configured manually editing the config.txt file, or running the helper script configAssistant.sh.
 
 ### Programs
 - Annovar
@@ -79,8 +79,8 @@ The string contained on these variables are executed using eval before the execu
 - *ITHE_SUBMIT_SED*: Command that when executed and piped the job submission command returns the ID of the job
 - *ITHE_SUBMIT_MUL*: Arguments to add to ITHE_SUBMIT_CMD, except the number of threads, which will be appended automatically, when submitting a multithreaded job. For example, "-N 1 -n 1 -c " for SLURM
 - *ITHE_SUBMIT_PAR*: Argument to indicate the queue/partition a job should be submitted to. For example, "--partition=" for SLURM 
-- *ITHE_ARG_DEP*: Argument to indicate the dependencies of a job when it is submitted. For example, "--dependency=afterok" for SLURM (or a different condition)
-- *ITHE_ARG_SEP*: Argument that separates job_ids when indicating dependencies, ":" for SLURM.
+- *ITHE_SUBMIT_DEP*: Argument to indicate the dependencies of a job when it is submitted. For example, "--dependency=afterok" for SLURM (or a different condition)
+- *ITHE_SUBMIT_SEP*: Argument that separates job_ids when indicating dependencies, ":" for SLURM.
 - *ITHE_MAX_TIME*: Argument to indicate the maximum time that can be allocated to a job. This will only be used for time-consuming steps of the pipeline. We recomend to set this parameter only if the user will be using ITHE to carry out parameter optimization. Example, "-t 4-00:00" to allocate four days in SLURM.
 - *ITHE_MAX_MEM*: Argument to indicate the maximum memory that can be allocated by a job. This will only be used by memory-intensive steps of the pipeline. We recomend to set this parameter only if the user will be using ITHE to carry out parameter optimization. Example, "--mem=16G" to allocate 16GB of RAM in SLURM. More than 16GB should not be needed.
 
@@ -201,5 +201,5 @@ The main output of ITHE_loop.sh is the results.csv file. This comma-separated fi
 The final list of variants can be obtained using the ITHE_getVariants.sh command, as explained above.
 
 # Citation
-Fortunato A\*, Mallo D\*, et al. (submitted) A new method to accurately identify single nucleotide variants using small FFPE breast samples
+Fortunato A\*, Mallo D\*, Rupp SM, King LM, Hardman T, Lo J, Hall A, Marks JR, Hwang ES, Maley CC (submitted) A new method to accurately identify single nucleotide variants using small FFPE breast samples
 

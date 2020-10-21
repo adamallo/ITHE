@@ -1,2 +1,3 @@
 config.txt
-example/out/*
+example/out*/*
+myConfigAssistantInput.txt

@@ -27,7 +27,7 @@ then
 else
     id=$($ITHE_SUBMIT_CMD ${ITHE_SUBMIT_PAR}$queue $ITHE_INT/perl.sh $ITHE_INT/tabulate_annovar.pl -d $dir -o ${outvariants}_tmp --covB covB --paf PAF | eval $ITHE_SUBMIT_SED)
 fi
-dependency="${ITHE_ARG_DEP}${ITHE_ARG_SEP}${id}"
+dependency="${ITHE_SUBMIT_DEP}${ITHE_SUBMIT_SEP}${id}"
 
 if [[ $queue == "" ]]
 then

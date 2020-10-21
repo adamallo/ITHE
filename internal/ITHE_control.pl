@@ -20,7 +20,7 @@ my $qsub=$ENV{'ITHE_SUBMIT_MUL'};
 my $qsub_noparallel=''; 
 my $sed=$ENV{'ITHE_SUBMIT_SED'};
 my $sep_dep=":";
-my $dep_prefix=$ENV{'ITHE_ARG_DEP'};
+my $dep_prefix=$ENV{'ITHE_SUBMIT_DEP'};
 
 #Internal dependencies
 my $ITHE_INT=$ENV{'ITHE_INT'};
