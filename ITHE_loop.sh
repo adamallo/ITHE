@@ -94,7 +94,7 @@ do
     filetype=("Control" "SampleA" "SampleB")
     files=($abscontrol $absa $absb)
 
-    for ifile in {1..3}
+    for ifile in {0..2}
     do
         if [[ ! -s ${files[!ifile]} ]]
         then
