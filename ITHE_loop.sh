@@ -1,5 +1,17 @@
 #!/bin/bash
 
+##Functions
+function getFilePath {
+    file=$1
+    dir=$2
+    if [[ $(echo $file | grep -c "^/") -eq 1 ]]
+    then
+        echo $(readlink -f $file)
+    else
+        echo $(readlink -f $dir/$file)
+    fi
+}
+
 usage="ITHE Usage:\n-----------\n$0 directory torun_file exe_params filtering_params NAB_params covB_params popAF_params n_cores output_vcf output_list comprehensiveness filterINDELS [queue]\nThis script executes ITHE_control.pl for each sample in a directory with its name. Then it integrates all the information in a file named results.csv and results_basictstv.csv.\nManifest file structure: output N_file A_file B_file [DNA_Quantity]"
 
 queue=""
@@ -73,9 +85,9 @@ reldir=$(dirname $2)
 dependency=""
 while read -r output control a b dnac
 do
-    abscontrol=$(readlink -f $reldir/$control)
-    absa=$(readlink -f $reldir/$a)
-    absb=$(readlink -f $reldir/$b)
+    abscontrol=$(getFilePath $control $reldir)
+    absa=$(getFilePath $a $reldir)
+    absb=$(getFilePath $b $reldir)
 
     echo -e "Launching jobs for $output, control file $abscontrol, sampleA file $absa, sampleB file $absb"
     
