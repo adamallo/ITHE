@@ -96,9 +96,9 @@ do
 
     for ifile in {0..2}
     do
-        if [[ ! -s ${files[!ifile]} ]]
+        if [[ ! -f "${files[$ifile]}" ]]
         then
-            echo -e "\tERROR: cannot open the file ${files[!ifile]} as the ${filetype[!ifile]} data for $output, according to the manifest file. ITHE will stop submitting jobs. You may want to stop the jobs submitted and empty the output directory before re-running this program. List of jobs already submitted:"
+            echo -e "\tERROR: cannot open the file ${files[$ifile]} as the ${filetype[$ifile]} data for $output, according to the manifest file. ITHE will stop submitting jobs. You may want to stop the jobs submitted and empty the output directory before re-running this program. List of jobs already submitted:"
             echo $(echo $dependency | sed "s/${ITHE_SUBMIT_SEP}/ /g")
             exit 1
         fi
