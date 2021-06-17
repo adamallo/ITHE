@@ -202,5 +202,5 @@ The main output of ITHE_loop.sh is the results.csv file. This comma-separated fi
 The final list of variants can be obtained using the ITHE_getVariants.sh command, as explained above.
 
 # Citation
-Fortunato A\*, Mallo D\*, Rupp SM, King LM, Hardman T, Lo J, Hall A, Marks JR, Hwang ES, Maley CC (submitted) A new method to accurately identify single nucleotide variants using small FFPE breast samples
+Fortunato A\*, Mallo D\*, Rupp SM, King LM, Hardman T, Lo J, Hall A, Marks JR, Hwang ES, Maley CC (2021) A new method to accurately identify single nucleotide variants using small FFPE breast samples. Briefings in Bioinformatics. DOI: [10.1093/bib/bbab221](https://doi.org/10.1093/bib/bbab221)
 
